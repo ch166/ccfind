@@ -151,7 +151,6 @@ def find_cards(input_line, linenum, input_filename):
     if found_pattern is not None:
         card_type = "ICARD"
         found_card(input_line, card_type, found_pattern, linenum, input_filename)
-        cardcount += 1
         return 1
     found_pattern = re.search(r"\b(4[0-9]{14,17})\b.", input_line)
     if found_pattern is not None:
