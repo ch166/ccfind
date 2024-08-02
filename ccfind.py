@@ -6,45 +6,7 @@ import argparse
 
 import utils
 import ccregex
-
-RED = "\033[1;31m"
-BLUE = "\033[1;34m"
-CYAN = "\033[1;36m"
-GREEN = "\033[0;32m"
-RESET = "\033[0;0m"
-BOLD = "\033[;1m"
-REVERSE = "\033[;7m"
-
-
-def found_card(args, input_line, cardType, found_match, linenum, input_filename):
-    """Report card discovery information"""
-    card_string = found_match.group(0)
-    card_number = utils.prune_chars_from_int(card_string)
-    if args.debug:
-        print(f"{card_string}:{card_number}")
-    valid_card_number = utils.validate_credit_card(card_number)
-    if args.machine:
-        print(f"{linenum},{input_filename},{found_match.group(0)},{valid_card_number}")
-        return
-    if args.color:
-        print(f"{BLUE}", end="")
-    print(f"file:{input_filename}: ", end="")
-    if args.color:
-        print(f"{GREEN}", end="")
-    print(f"line:{linenum} Potential {cardType} card found: Valid: {valid_card_number}")
-    if args.pattern:
-        if args.color:
-            print(f"{RED}", end="")
-        if args.verbose:
-            print(f"Regex Match:", end="")
-        print(f"{found_match.group(0)}")
-    if args.context:
-        if args.color:
-            print(f"{RED}", end="")
-        if args.verbose:
-            print(f"Regex Match:", end="")
-        print(f"{found_match.string}")
-
+import tty_colors
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
@@ -110,8 +72,8 @@ if __name__ == "__main__":
                 else:
                     print("-", end="", flush=True)
         if args.color:
-            print(f"{RESET}", end="")
+            print(f"{tty_colors.RESET}", end="")
     if args.summary:
         if args.color:
-            print(f"{CYAN}", end="")
+            print(f"{tty_colors.CYAN}", end="")
         print(f"Summary: file:{input_filename}: matches:{cardcount}")

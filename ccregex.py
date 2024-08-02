@@ -2,6 +2,7 @@ import re
 import sys
 
 import utils
+import tty_colors
 
 
 def found_card(args, input_line, cardType, found_match, linenum, input_filename):
@@ -15,20 +16,20 @@ def found_card(args, input_line, cardType, found_match, linenum, input_filename)
         print(f"{linenum},{input_filename},{found_match.group(0)},{valid_card_number}")
         return
     if args.color:
-        print(f"{BLUE}", end="")
+        print(f"{tty_colors.BLUE}", end="")
     print(f"file:{input_filename}: ", end="")
     if args.color:
-        print(f"{GREEN}", end="")
+        print(f"{tty_colors.GREEN}", end="")
     print(f"line:{linenum} Potential {cardType} card found: Valid: {valid_card_number}")
     if args.pattern:
         if args.color:
-            print(f"{RED}", end="")
+            print(f"{tty_colors.RED}", end="")
         if args.verbose:
             print(f"Regex Match:", end="")
         print(f"{found_match.group(0)}")
     if args.context:
         if args.color:
-            print(f"{RED}", end="")
+            print(f"{tty_colors.RED}", end="")
         if args.verbose:
             print(f"Regex Match:", end="")
         print(f"{found_match.string}")
