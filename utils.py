@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*- #
 
+
 def validate_credit_card(card_number: str) -> bool:
     """This function validates a credit card number."""
     # 1. Change datatype to list[int]
@@ -31,6 +32,7 @@ def validate_credit_card(card_number: str) -> bool:
 
     # 8. If checkSum is divisible by 10, it is valid.
     return checkSum % 10 == 0
+
 
 def prune_chars_from_int(input_string: str) -> str:
     """Remove non int-characters from string"""
