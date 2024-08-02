@@ -15,6 +15,9 @@ REVERSE = "\033[;7m"
 
 def found_card(args, input_line, cardType, found_match, linenum, input_filename):
     """Report card discovery information"""
+    if args.machine:
+        print(f"{linenum},{input_filename},{found_match.group(0)}")
+        return
     if args.color:
         print(f"{BLUE}", end="")
     print(f"file:{input_filename}: ", end="")
@@ -251,6 +254,10 @@ if __name__ == "__main__":
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="Print additional progress details"
     )
+    parser.add_argument(
+        "-m", "--machine", action="store_true", help="Machine Processable Output"
+    )
+
     args = parser.parse_args()
     input_filename = args.filename
     cardcount = 0
