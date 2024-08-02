@@ -31,3 +31,11 @@ def validate_credit_card(card_number: str) -> bool:
 
     # 8. If checkSum is divisible by 10, it is valid.
     return checkSum % 10 == 0
+
+def prune_chars_from_int(input_string: str) -> str:
+    """Remove non int-characters from string"""
+    output_string = ""
+    for c in input_string:
+        if c.isnumeric():
+            output_string += c
+    return output_string
