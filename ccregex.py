@@ -1,11 +1,13 @@
+# -*- coding: utf-8 -*- #
+"""Code to handle searching for known CCard/Debit card regular expressions on input lines."""
+
 import re
-import sys
 
 import utils
 import tty_colors
 
 
-def found_card(args, input_line, cardType, found_match, linenum, input_filename):
+def found_card(args, input_line: str, card_type: str, found_match, linenum: int, input_filename: str):
     """Report card discovery information"""
     card_string = found_match.group(0)
     card_number = utils.prune_chars_from_int(card_string)
@@ -20,18 +22,18 @@ def found_card(args, input_line, cardType, found_match, linenum, input_filename)
     print(f"file:{input_filename}: ", end="")
     if args.color:
         print(f"{tty_colors.GREEN}", end="")
-    print(f"line:{linenum} Potential {cardType} card found: Valid: {valid_card_number}")
+    print(f"line:{linenum} Potential {card_type} card found: Valid: {valid_card_number}")
     if args.pattern:
         if args.color:
             print(f"{tty_colors.RED}", end="")
         if args.verbose:
-            print(f"Regex Match:", end="")
+            print("Regex Match:", end="")
         print(f"{found_match.group(0)}")
     if args.context:
         if args.color:
             print(f"{tty_colors.RED}", end="")
         if args.verbose:
-            print(f"Regex Match:", end="")
+            print("Regex Match:", end="")
         print(f"{found_match.string}")
 
 

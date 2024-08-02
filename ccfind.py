@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*- #
+"""Collection of functions to search for CCard/Debit card numbers in a file"""
 
-import re
-import sys
 import argparse
 
-import utils
 import ccregex
 import tty_colors
 
