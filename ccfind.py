@@ -17,7 +17,11 @@ REVERSE = "\033[;7m"
 
 def found_card(args, input_line, cardType, found_match, linenum, input_filename):
     """Report card discovery information"""
-    valid_card_number = utils.validate_credit_card(found_match.group(0))
+    card_string = found_match.group(0)
+    card_number = list(filter(lambda x: x.isdigit(), card_string.split()))
+    res = [int(s) for s in card_number]
+    print(f"{card_string}:{res}")
+    valid_card_number = utils.validate_credit_card(card_number)
     if args.machine:
         print(f"{linenum},{input_filename},{found_match.group(0)},{valid_card_number}")
         return
