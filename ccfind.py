@@ -270,11 +270,11 @@ if __name__ == "__main__":
             cardcount += find_cards(args, line.strip(), linenum, input_filename)
             if args.debug:
                 if linenum % 2 == 0:
-                    print('.', end='', flush=True)
+                    print(".", end="", flush=True)
                 else:
-                    print('-', end='', flush=True)
+                    print("-", end="", flush=True)
         if args.color:
-            print(f"{RESET}", end='')
+            print(f"{RESET}", end="")
     if args.summary:
         if args.color:
             print(f"{CYAN}", end="")

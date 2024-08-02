@@ -2,6 +2,7 @@
 
 print("Initial test success")
 
+
 def func(x):
     return x + 1
 
