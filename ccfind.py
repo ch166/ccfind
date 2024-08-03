@@ -6,6 +6,7 @@ import argparse
 
 import ccregex
 import tty_colors
+import utils
 
 
 def read_known_list(known_filename: str):
@@ -78,7 +79,7 @@ if __name__ == "__main__":
     if args.knownlist:
         knownlist = read_known_list(args.knownlist)
 
-    if args.debug:
+    if args.debug and args.knownlist:
         print(f"knownlist:{knownlist}")
 
     if args.outputfile:
@@ -95,10 +96,14 @@ if __name__ == "__main__":
             (card_found, card_type, found_pattern) = ccregex.find_cards(
                 args, line.strip(), linenum, input_filename
             )
+            if card_found:
+                pruned_number = utils.prune_chars_from_int(found_pattern.group(0))
+            else:
+                pruned_number = None
             if card_found and args.knownlist:
                 if args.debug:
-                    print(f"looking for {found_pattern.group(0)} in {knownlist}")
-                if found_pattern.group(0) in knownlist:
+                    print(f"\nlooking for {found_pattern.group(0)} as {pruned_number} in {knownlist}")
+                if pruned_number in knownlist:
                     known_card_id = True
             if card_found:
                 cardcount += 1
