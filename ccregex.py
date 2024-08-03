@@ -215,11 +215,11 @@ def find_cards(args, input_line, linenum, input_filename):
 
     found_pattern = re.search(r"\d{4}([\ \-]?)\d{4}([\ \-]?)\d{4,7}", input_line)
     if found_pattern is not None:
-        card_type = "generic loose pattern credit/debit"
+        card_type = "generic loose pattern credit/debit (possible partial match)"
         return (True, card_type, found_pattern)
 
     found_pattern = re.search(r"\d{4}([\ \-]?)\d{5}([\ \-]?)\d{4,7}", input_line)
     if found_pattern is not None:
-        card_type = "generic loose pattern credit/debit"
+        card_type = "generic loose pattern credit/debit (possible partial match)"
         return (True, card_type, found_pattern)
     return (False, None, None)
