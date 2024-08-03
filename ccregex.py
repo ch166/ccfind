@@ -59,7 +59,7 @@ def find_cards(args, input_line, linenum, input_filename):
         return (True, card_type, found_pattern)
 
     found_pattern = re.search(
-        r"\b(?:3[47]\d{2}([\ \-]?)\d{6}\1\d|(?:(?:4\d|5[1-5]|65)\d{2}|6011)([\ \-]?)\d{4}\2\d{4}\2)\d{4}\b",
+        r"(?:3[47]\d{2}([\ \-]?)\d{6}\1\d|(?:(?:4\d|5[1-5]|65)\d{2}|6011)([\ \-]?)\d{4}\2\d{4}\2)\d{4}",
         input_line,
     )
     if found_pattern is not None:
@@ -75,7 +75,7 @@ def find_cards(args, input_line, linenum, input_filename):
         return (True, card_type, found_pattern)
 
     found_pattern = re.search(
-        r"(?ms)(.*)\b(?:4[0-9]{8}(?:[0-9]{3})?|5[1-5][0-9]{10}|6(?:011|5[0-9]{2})[0-9]{8}|3[47][0-9]{9}|3(?:0[0-5]|[68][0-9])[0-9]{7}|(?:2131|1800|35\d{3})\d{7})(\d{4}\b.*)",
+        r"(?:4[0-9]{8}(?:[0-9]{3})?|5[1-5][0-9]{10}|6(?:011|5[0-9]{2})[0-9]{8}|3[47][0-9]{9}|3(?:0[0-5]|[68][0-9])[0-9]{7}|(?:2131|1800|35\d{3})\d{7})(\d{4})",
         input_line,
     )
     if found_pattern is not None:
@@ -208,8 +208,18 @@ def find_cards(args, input_line, linenum, input_filename):
         card_type = "credit/debit"
         return (True, card_type, found_pattern)
 
-    found_pattern = re.search(r"^4\d{3}([ \-]?)\d{4}\d{4}\d{4}$", input_line)
+    found_pattern = re.search(r"4\d{3}([ \-]?)\d{4}\d{4}\d{4}", input_line)
     if found_pattern is not None:
         card_type = "credit/debit"
+        return (True, card_type, found_pattern)
+
+    found_pattern = re.search(r"\d{4}([\ \-]?)\d{4}([\ \-]?)\d{4,7}", input_line)
+    if found_pattern is not None:
+        card_type = "generic loose pattern credit/debit"
+        return (True, card_type, found_pattern)
+
+    found_pattern = re.search(r"\d{4}([\ \-]?)\d{5}([\ \-]?)\d{4,7}", input_line)
+    if found_pattern is not None:
+        card_type = "generic loose pattern credit/debit"
         return (True, card_type, found_pattern)
     return (False, None, None)
