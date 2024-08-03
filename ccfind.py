@@ -27,6 +27,12 @@ if __name__ == "__main__":
         "filename", help="file to be searched for patterns matching credit cards"
     )
     parser.add_argument(
+        "-a",
+        "--aggressive",
+        action="store_true",
+        help="Use simplistic (aggressive) pattern matching - possible false positives",
+    )
+    parser.add_argument(
         "-c",
         "--color",
         action="store_true",
@@ -93,16 +99,24 @@ if __name__ == "__main__":
             known_card_id = False
             card_found = False
             linenum += 1
-            (card_found, card_type, found_pattern) = ccregex.find_cards(
-                args, line.strip(), linenum, input_filename
-            )
-            if card_found:
-                pruned_number = utils.prune_chars_from_int(found_pattern.group(0))
-            else:
-                pruned_number = None
+            if args.aggressive:
+                (card_found, card_type, found_pattern) = ccregex.simple_card_search(line.strip())
+                if card_found:
+                    print(f"\nAggressive discovery of {found_pattern.group(0)}")
+                    pruned_number = utils.prune_chars_from_int(found_pattern.group(0))
+                else:
+                    pruned_number = None
+            if not args.aggressive:
+                (card_found, card_type, found_pattern) = ccregex.find_cards(line.strip())
+                if card_found:
+                    pruned_number = utils.prune_chars_from_int(found_pattern.group(0))
+                else:
+                    pruned_number = None
             if card_found and args.knownlist:
                 if args.debug:
-                    print(f"\nlooking for {found_pattern.group(0)} as {pruned_number} in {knownlist}")
+                    print(
+                        f"\nlooking for {found_pattern.group(0)} as {pruned_number} in {knownlist}"
+                    )
                 if pruned_number in knownlist:
                     known_card_id = True
             if card_found:

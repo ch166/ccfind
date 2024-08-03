@@ -50,10 +50,27 @@ def found_card(
         print(f"{found_match.string}")
 
 
-def find_cards(args, input_line, linenum, input_filename):
-    """Regex search through line"""
+def simple_card_search(input_line):
+    """Aggressive simplistic pattern matching."""
     found_pattern = None
-    found_pattern = re.search(r"3[47]\d{2}(\ \-?)\d{5}(\ \-?)[0-9]{6}", input_line,)
+    search_string = utils.prune_known_separators(input_line)
+    found_pattern = re.search(
+        r"\d{13,16}",
+        search_string,
+    )
+    if found_pattern is not None:
+        card_type = "Aggressive Search"
+        return (True, card_type, found_pattern)
+    return(False, None, None)
+
+
+def find_cards(input_line):
+    """Regex search through line."""
+    found_pattern = None
+    found_pattern = re.search(
+        r"3[47]\d{2}(\ \-?)\d{5}(\ \-?)[0-9]{6}",
+        input_line,
+    )
     if found_pattern is not None:
         card_type = "American Express"
         return (True, card_type, found_pattern)
