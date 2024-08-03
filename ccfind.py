@@ -7,6 +7,16 @@ import argparse
 import ccregex
 import tty_colors
 
+
+def read_known_list(known_filename: str):
+    """Read known values into list"""
+    known_list = []
+    with open(known_filename, encoding="utf-8") as fp:
+        for line in fp:
+            known_list.append(line.strip())
+    return known_list
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         prog="ccfind",
@@ -22,10 +32,10 @@ if __name__ == "__main__":
         help="Display colors in output (Default: off)",
     )
     parser.add_argument(
-        "-t",
-        "--testfile",
+        "-k",
+        "--knownlist",
         action="store",
-        help="File containing pattern of known test credit cards (optional)",
+        help="File containing pattern of known test credit cards",
     )
     parser.add_argument(
         "-o",
@@ -65,6 +75,12 @@ if __name__ == "__main__":
     input_filename = args.filename
     cardcount = 0
 
+    if args.knownlist:
+        knownlist = read_known_list(args.knownlist)
+
+    if args.debug:
+        print(f"knownlist:{knownlist}")
+
     if args.outputfile:
         outfile = open(args.outputfile, "w+", encoding="utf-8")
 
@@ -73,10 +89,17 @@ if __name__ == "__main__":
             print(f"Looking for cards in file {input_filename}")
         linenum = 0
         for line in fp:
+            known_card_id = False
+            card_found = False
             linenum += 1
             (card_found, card_type, found_pattern) = ccregex.find_cards(
                 args, line.strip(), linenum, input_filename
             )
+            if card_found and args.knownlist:
+                if args.debug:
+                    print(f"looking for {found_pattern.group(0)} in {knownlist}")
+                if found_pattern.group(0) in knownlist:
+                    known_card_id = True
             if card_found:
                 cardcount += 1
                 ccregex.found_card(
@@ -86,6 +109,7 @@ if __name__ == "__main__":
                     found_pattern,
                     linenum,
                     input_filename,
+                    known_card_id,
                 )
             if card_found and args.machine:
                 valid_card_number = ccregex.validate_cardnumber(
@@ -94,11 +118,11 @@ if __name__ == "__main__":
 
                 if args.outputfile:
                     outfile.write(
-                        f"{linenum},{input_filename},{found_pattern.group(0)},{valid_card_number}\n"
+                        f"{linenum},{input_filename},{found_pattern.group(0)},{valid_card_number},{known_card_id}\n"
                     )
                 else:
                     print(
-                        f"{linenum},{input_filename},{found_pattern.group(0)},{valid_card_number}"
+                        f"{linenum},{input_filename},{found_pattern.group(0)},{valid_card_number},{known_card_id}"
                     )
             if args.debug:
                 if linenum % 2 == 0:
@@ -114,4 +138,3 @@ if __name__ == "__main__":
 
     if args.outputfile:
         outfile.close()
-

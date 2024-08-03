@@ -23,6 +23,7 @@ def found_card(
     found_match,
     linenum: int,
     input_filename: str,
+    known_card_id: bool,
 ):
     """Report card discovery information"""
 
@@ -33,7 +34,7 @@ def found_card(
     if args.color:
         print(f"{tty_colors.GREEN}", end="")
     print(
-        f"line:{linenum} Potential {card_type} card found: Valid: {valid_card_number}"
+        f"line:{linenum} Potential {card_type} card found: Valid: {valid_card_number}: Known Card:{known_card_id}"
     )
     if args.pattern:
         if args.color:
