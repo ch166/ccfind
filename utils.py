@@ -7,7 +7,7 @@ def validate_credit_card(card_number: str) -> bool:
     card_number = [int(num) for num in card_number]
 
     # 2. Remove the last digit:
-    checkDigit = card_number.pop(-1)
+    check_dig = card_number.pop(-1)
 
     # 3. Reverse the remaining digits:
     card_number.reverse()
@@ -24,8 +24,8 @@ def validate_credit_card(card_number: str) -> bool:
         for idx, num in enumerate(card_number)
     ]
 
-    # 6. Add the checkDigit back to the list:
-    card_number.append(checkDigit)
+    # 6. Add the check_digit back to the list:
+    card_number.append(check_dig)
 
     # 7. Sum all digits:
     checkSum = sum(card_number)

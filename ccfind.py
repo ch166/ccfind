@@ -28,6 +28,12 @@ if __name__ == "__main__":
         help="File containing pattern of known test credit cards (optional)",
     )
     parser.add_argument(
+        "-o",
+        "--outputfile",
+        action="store",
+        help="Write machine output results to the output file. Does not write normal output",
+    )
+    parser.add_argument(
         "-s",
         "--summary",
         action="store_true",
@@ -58,13 +64,42 @@ if __name__ == "__main__":
     args = parser.parse_args()
     input_filename = args.filename
     cardcount = 0
-    with open(input_filename) as fp:
+
+    if args.outputfile:
+        outfile = open(args.outputfile, "w+", encoding="utf-8")
+
+    with open(input_filename, encoding="utf-8") as fp:
         if args.verbose:
             print(f"Looking for cards in file {input_filename}")
         linenum = 0
         for line in fp:
             linenum += 1
-            cardcount += ccregex.find_cards(args, line.strip(), linenum, input_filename)
+            (card_found, card_type, found_pattern) = ccregex.find_cards(
+                args, line.strip(), linenum, input_filename
+            )
+            if card_found:
+                cardcount += 1
+                ccregex.found_card(
+                    args,
+                    line.strip(),
+                    card_type,
+                    found_pattern,
+                    linenum,
+                    input_filename,
+                )
+            if card_found and args.machine:
+                valid_card_number = ccregex.validate_cardnumber(
+                    args, found_pattern.group(0)
+                )
+
+                if args.outputfile:
+                    outfile.write(
+                        f"{linenum},{input_filename},{found_pattern.group(0)},{valid_card_number}\n"
+                    )
+                else:
+                    print(
+                        f"{linenum},{input_filename},{found_pattern.group(0)},{valid_card_number}"
+                    )
             if args.debug:
                 if linenum % 2 == 0:
                     print(".", end="", flush=True)
@@ -76,3 +111,7 @@ if __name__ == "__main__":
         if args.color:
             print(f"{tty_colors.CYAN}", end="")
         print(f"Summary: file:{input_filename}: matches:{cardcount}")
+
+    if args.outputfile:
+        outfile.close()
+
