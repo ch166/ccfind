@@ -102,14 +102,18 @@ if __name__ == "__main__":
             card_found = False
             linenum += 1
             if args.aggressive:
-                (card_found, card_type, found_pattern, regex_id) = ccregex.simple_card_search(line.strip())
+                (card_found, card_type, found_pattern, regex_id) = (
+                    ccregex.simple_card_search(line.strip())
+                )
                 if card_found:
                     print(f"\nAggressive discovery of {found_pattern.group(0)}")
                     pruned_number = utils.prune_chars_from_int(found_pattern.group(0))
                 else:
                     pruned_number = None
             if not args.aggressive:
-                (card_found, card_type, found_pattern, regex_id) = ccregex.find_cards(line.strip())
+                (card_found, card_type, found_pattern, regex_id) = ccregex.find_cards(
+                    line.strip()
+                )
                 if card_found:
                     pruned_number = utils.prune_chars_from_int(found_pattern.group(0))
                 else:

@@ -42,9 +42,10 @@ def prune_chars_from_int(input_string: str) -> str:
             output_string += c
     return output_string
 
+
 def prune_known_separators(input_string: str) -> str:
     """Remove non int-characters from string"""
-    known_separators = [' ', '-']
+    known_separators = [" ", "-"]
     output_string = ""
     for c in input_string:
         if c not in known_separators:

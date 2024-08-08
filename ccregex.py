@@ -62,7 +62,7 @@ def simple_card_search(input_line):
     if found_pattern is not None:
         card_type = "Aggressive Search"
         return (True, card_type, found_pattern, "regexid: aggressive")
-    return(False, None, None)
+    return (False, None, None)
 
 
 def find_cards(input_line):
