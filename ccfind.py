@@ -91,6 +91,8 @@ if __name__ == "__main__":
     if args.outputfile:
         outfile = open(args.outputfile, "w+", encoding="utf-8")
 
+    regex_id = None
+
     with open(input_filename, encoding="utf-8") as fp:
         if args.verbose:
             print(f"Looking for cards in file {input_filename}")
@@ -100,14 +102,14 @@ if __name__ == "__main__":
             card_found = False
             linenum += 1
             if args.aggressive:
-                (card_found, card_type, found_pattern) = ccregex.simple_card_search(line.strip())
+                (card_found, card_type, found_pattern, regex_id) = ccregex.simple_card_search(line.strip())
                 if card_found:
                     print(f"\nAggressive discovery of {found_pattern.group(0)}")
                     pruned_number = utils.prune_chars_from_int(found_pattern.group(0))
                 else:
                     pruned_number = None
             if not args.aggressive:
-                (card_found, card_type, found_pattern) = ccregex.find_cards(line.strip())
+                (card_found, card_type, found_pattern, regex_id) = ccregex.find_cards(line.strip())
                 if card_found:
                     pruned_number = utils.prune_chars_from_int(found_pattern.group(0))
                 else:
@@ -115,7 +117,7 @@ if __name__ == "__main__":
             if card_found and args.knownlist:
                 if args.debug:
                     print(
-                        f"\nlooking for {found_pattern.group(0)} as {pruned_number} in {knownlist}"
+                        f"\nlooking for {found_pattern.group(0)} as {pruned_number} in {knownlist} using {regex_id}"
                     )
                 if pruned_number in knownlist:
                     known_card_id = True
@@ -129,6 +131,7 @@ if __name__ == "__main__":
                     linenum,
                     input_filename,
                     known_card_id,
+                    regex_id,
                 )
             if card_found and args.machine:
                 valid_card_number = ccregex.validate_cardnumber(
@@ -137,11 +140,11 @@ if __name__ == "__main__":
 
                 if args.outputfile:
                     outfile.write(
-                        f"{linenum},{input_filename},{found_pattern.group(0)},{valid_card_number},{known_card_id}\n"
+                        f"{linenum},{input_filename},{found_pattern.group(0)},{valid_card_number},{known_card_id},{regex_id}\n"
                     )
                 else:
                     print(
-                        f"{linenum},{input_filename},{found_pattern.group(0)},{valid_card_number},{known_card_id}"
+                        f"{linenum},{input_filename},{found_pattern.group(0)},{valid_card_number},{known_card_id},{regex_id}"
                     )
             if args.debug:
                 if linenum % 2 == 0:
