@@ -110,7 +110,7 @@ def find_cards(input_line):
         card_type = "BCGlobal"
         return (True, card_type, found_pattern, "regexid: 06")
 
-    found_pattern = re.search(r"389[0-9]([\s\-]?){11}", input_line)
+    found_pattern = re.search(r"389[0-9]([\s\-]?)\d{11}", input_line)
     if found_pattern is not None:
         card_type = "Carte Blanche"
         return (True, card_type, found_pattern, "regexid: 07")
@@ -125,7 +125,7 @@ def find_cards(input_line):
         card_type = "Discover"
         return (True, card_type, found_pattern, "regexid: 09")
 
-    found_pattern = re.search(r"63[7-9][0-9]([\s\-]?){13}", input_line)
+    found_pattern = re.search(r"63[7-9][0-9]([\s\-]?)\d{13}", input_line)
     if found_pattern is not None:
         card_type = "Insta Paymentcard"
         return (True, card_type, found_pattern, "regexid: 10")
@@ -234,7 +234,7 @@ def find_cards(input_line):
     found_pattern = re.search(r"\d{4}([\s\-]?)\d{4}([\s\-]?)\d{4,7}", input_line)
     if found_pattern is not None:
         card_type = "generic loose pattern credit/debit (possible partial match)"
-        return (True, card_type, found_pattern, "regexid: 28")
+        # return (True, card_type, found_pattern, "regexid: 28")
 
     found_pattern = re.search(r"\d{4}([\s\-]?)\d{5}([\s\-]?)\d{4,7}", input_line)
     if found_pattern is not None:
